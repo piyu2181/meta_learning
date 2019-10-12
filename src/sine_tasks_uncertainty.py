@@ -31,11 +31,8 @@ class Sine_Task():
         y_true = self.amplitude * np.sin(self.phase + x * sine_freq)
         # adding noise 
         y2 = self.amplitude_noise * np.sin(self.phase_noise + (x)*noise_freq)# sigma
-        #kernel = (y2 * y2)*np.identity(x.shape[0])
         ydist = np.random.normal(0,1, x.shape[0])
-        #y_noise = np.matmul(y2, kernel)
         noise = (y2*y2)*0.5 * ydist
-        #y_noisy = y + y_noise
         
         return (y_true, noise, y2 )
         
@@ -65,21 +62,12 @@ class Sine_Task():
         
         if target_flag:
             context_x = x[:size]
-            context_y_true = y_true[:size]
+            #context_y_true = y_true[:size]
             context_y_noisy = y_noisy[:size]
-            context_sigma = sigma[:size]
-            context_noise = noise[:size]
-            return (context_x, context_y_true, context_y_noisy, context_sigma, context_noise )
-        
-#        else:
-#          
-#            context_x = x[-size:]
-#            context_y = y[-size:]
-#            context_y2 = y2[-size]
-#            return (context_x, context_y, context_y2)
-        
-        #return(x, y, y2)
-        
+            #context_sigma = sigma[:size]
+            #context_noise = noise[:size]
+            #return (context_x, context_y_true, context_y_noisy, context_sigma, context_noise )
+            return(context_x, context_y_noisy)
         
     
 class Sine_Task_Distribution():
@@ -88,15 +76,13 @@ class Sine_Task_Distribution():
     """
     
     def __init__(self, amplitude_min, amplitude_max, phase_min, phase_max, x_min, x_max,
-                 amplitude_min_noise, amplitude_max_noise, phase_min_noise, phase_max_noise):
+                 phase_min_noise, phase_max_noise):
         self.amplitude_min = amplitude_min
         self.amplitude_max = amplitude_max
         self.phase_min = phase_min
         self.phase_max = phase_max
         self.x_min = x_min
         self.x_max = x_max
-        self.amplitude_min_noise = amplitude_min_noise
-        self.amplitude_max_noise = amplitude_max_noise
         self.phase_min_noise = phase_min_noise
         self.phase_max_noise = phase_max_noise
         #self.number_of_points = number_of_points
@@ -115,10 +101,6 @@ class Sine_Task_Distribution():
         a = np.random.uniform(0,1,1) # a is the scale for amplitude
         amplitude_noise = amplitude * a
         phase_noise = np.random.uniform(self.phase_min_noise, self.phase_max_noise)
-        #x = np.random.uniform(self.x_min, self.x_max, self.number_of_points)
-        
-       #obj1 =  Sine_Task(amplitude, phase, self.x_min, self.x_max, x)
-       # obj2 = Sine_Task(amplitude_noise, phase_noise, self.x_min, self.x_max, x)
         
         
         return Sine_Task(amplitude, phase, amplitude_noise, phase_noise, self.x_min, self.x_max )
